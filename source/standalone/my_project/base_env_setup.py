@@ -22,7 +22,7 @@ import torch
 import omni.isaac.orbit.sim as sim_utils
 from omni.isaac.orbit.assets import ArticulationCfg, AssetBaseCfg
 from omni.isaac.orbit.scene import InteractiveScene, InteractiveSceneCfg
-from omni.isaac.orbit.sim import SimulationContext, UsdFileCfg
+from omni.isaac.orbit.sim import SimulationContext, UsdFileCfg, GroundPlaneCfg, SpawnerCfg
 from omni.isaac.orbit.utils import configclass
 from omni.isaac.orbit.envs import BaseEnvCfg, BaseEnv, mdp
 
@@ -58,7 +58,7 @@ from omni.isaac.orbit.utils.assets import ISAAC_NUCLEUS_DIR, ISAAC_ORBIT_NUCLEUS
 class MySceneCfg(InteractiveSceneCfg):
     """Configuration for the terrain scene with a legged robot."""
 
-    ground = AssetBaseCfg(prim_path="/World/ground", spawn=sim_utils.GroundPlaneCfg(visible=False))
+    ground = AssetBaseCfg(prim_path="/World/ground", spawn=GroundPlaneCfg())
 
     room = AssetBaseCfg(prim_path="{ENV_REGEX_NS}/room",
                         spawn=UsdFileCfg(usd_path="omniverse://localhost/Library/assets/simple_room/simple_room.usd"),
@@ -192,6 +192,7 @@ class QuadrupedEnvCfg(BaseEnvCfg):
         # we tick all the sensors based on the smallest update period (physics update period)
         if self.scene.height_scanner is not None:
             self.scene.height_scanner.update_period = self.decimation * self.sim.dt  # 50 Hz
+
 
 
 def run_simulator(sim: sim_utils.SimulationContext, scene: InteractiveScene):
