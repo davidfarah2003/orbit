@@ -108,6 +108,7 @@ class EventCfg:
     )
 
 
+# environment configuration contains scene, observations, actions and events configs
 @configclass
 class CartpoleEnvCfg(BaseEnvCfg):
     """Configuration for the cartpole environment."""
@@ -119,6 +120,7 @@ class CartpoleEnvCfg(BaseEnvCfg):
     actions = ActionsCfg()
     events = EventCfg()
 
+    # Modify the envs.BaseEnvCfg.sim which defines the simulation parameters
     def __post_init__(self):
         """Post initialization."""
         # viewer settings
@@ -150,7 +152,7 @@ def main():
                 print("[INFO]: Resetting environment...")
             # sample random actions
             joint_efforts = torch.randn_like(env.action_manager.action)
-            # step the environment
+            # step the environment, i.e. apply the actions
             obs, _ = env.step(joint_efforts)
             # print current orientation of pole
             print("[Env 0]: Pole joint: ", obs["policy"][0][1].item())
